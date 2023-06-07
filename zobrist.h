@@ -1,18 +1,10 @@
-#ifndef ZOBRIST_H
-#define ZOBRIST_H
-#include "defines.h"
+#pragma once
 
-namespace Napoleon
+namespace Zobrist
 {
-    namespace Zobrist
-    {
-        extern ZobristKey Piece[2][6][64];
-        extern ZobristKey Castling[16];
-        extern ZobristKey Enpassant[8];
-        extern ZobristKey Color;
-
-        void Init();
-    }
+	extern uint64_t pieceInfo[2][7][74];
+	extern uint64_t Castling[16];
+	extern uint64_t Enpassant[8];
+	extern uint64_t Color;
+	void Init();
 }
-
-#endif // ZOBRIST_H

@@ -1,65 +1,61 @@
-#include "pawn.h"
-#include "board.h"
+#include "position.h"
+#include "ranks.h"
 
-namespace Napoleon
-{   
-    BitBoard Pawn::GetAllTargets(BitBoard pawns, Board& board)
-    {
-        BitBoard empty = board.EmptySquares;
+uint64_t Pawn::getAllTargets(const uint64_t pawns, const Pos& position)
+{
+	const uint64_t empty = position.emptySquares;
+	return getQuietTargets(position.getSideToMove(), pawns, empty) | getAnyAttack(pawns, position);
+}
 
-        return GetQuietTargets(board.SideToMove(), pawns, empty) | GetAnyAttack(pawns, board);
-    }
+uint64_t Pawn::getAnyAttack(const uint64_t pawns, const Pos& position)
+{
+	return (getEastAttacks(position.getSideToMove(), pawns) | getWestAttacks(position.getSideToMove(), pawns)) &
+		position.enemyPieces();
+}
 
-    BitBoard Pawn::GetAnyAttack(BitBoard pawns, Board& board)
-    {
-        return (GetEastAttacks(board.SideToMove(), pawns) | GetWestAttacks(board.SideToMove(), pawns)) & board.EnemyPieces();
-    }
+uint64_t Pawn::getAnyAttack(const uint64_t pawns, const uint8_t color, const uint64_t squares)
+{
+	return (getEastAttacks(color, pawns) | getWestAttacks(color, pawns)) & squares;
+}
 
-    BitBoard Pawn::GetAnyAttack(BitBoard pawns, Color color, BitBoard squares)
-    {
-        return (GetEastAttacks(color, pawns) | GetWestAttacks(color, pawns)) & squares;
-    }
+uint64_t Pawn::getPawnsAbleToSinglePush(const uint8_t color, const uint64_t pawns, const uint64_t empty)
+{
+	switch (color)
+	{
+	case White:
+		return Direction::oneStepSouth(empty) & pawns;
+	case Black:
+		return Direction::oneStepNorth(empty) & pawns;
+	default:
+		throw std::exception();
+	}
+}
 
-    BitBoard Pawn::GetPawnsAbleToSinglePush(Color color, BitBoard pawns, BitBoard empty)
-    {
-        switch (color)
-        {
-            case PieceColor::White:
-                return CompassRose::OneStepSouth(empty) & pawns;
-            case PieceColor::Black:
-                return CompassRose::OneStepNorth(empty) & pawns;
-            default:
-                throw std::exception();
-        }
-    }
+uint64_t Pawn::getPawnsAbleToDoublePush(const uint8_t color, const uint64_t pawns, const uint64_t empty)
+{
+	switch (color)
+	{
+	case White:
+	{
+		const uint64_t emptyRank3 = Direction::oneStepSouth(empty & Ranks::Four) & empty;
+		return getPawnsAbleToSinglePush(color, pawns, emptyRank3);
+	}
+	case Black:
+	{
+		const uint64_t emptyRank6 = Direction::oneStepNorth(empty & Ranks::Six) & empty;
+		return getPawnsAbleToSinglePush(color, pawns, emptyRank6);
+	}
+	default:
+		throw std::exception();
+	}
+}
 
-    BitBoard Pawn::GetPawnsAbleToDoublePush(Color color, BitBoard pawns, BitBoard empty)
-    {
-        switch (color)
-        {
-            case PieceColor::White:
-                {
-                    BitBoard emptyRank3 = CompassRose::OneStepSouth(empty & Constants::Ranks::Four) & empty;
-                    return GetPawnsAbleToSinglePush(color, pawns, emptyRank3);
-                }
-            case PieceColor::Black:
-                {
-                    BitBoard emptyRank6 = CompassRose::OneStepNorth(empty & Constants::Ranks::Six) & empty;
-                    return GetPawnsAbleToSinglePush(color, pawns, emptyRank6);
-                }
-            default:
-                throw std::exception();
-        }
-    }
+uint64_t Pawn::getEastAttacks(const uint8_t color, const uint64_t pawns)
+{
+	return color == White ? Direction::oneStepNorthEast(pawns) : Direction::oneStepSouthEast(pawns);
+}
 
-    BitBoard Pawn::GetEastAttacks(Color color, BitBoard pawns)
-    {
-        return color == PieceColor::White ? CompassRose::OneStepNorthEast(pawns) : CompassRose::OneStepSouthEast(pawns);
-    }
-
-    BitBoard Pawn::GetWestAttacks(Color color, BitBoard pawns)
-    {
-        return color == PieceColor::White ? CompassRose::OneStepNorthWest(pawns) : CompassRose::OneStepSouthWest(pawns);
-    }
-
+uint64_t Pawn::getWestAttacks(const uint8_t color, const uint64_t pawns)
+{
+	return color == White ? Direction::oneStepNorthWest(pawns) : Direction::oneStepSouthWest(pawns);
 }

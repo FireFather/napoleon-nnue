@@ -1,103 +1,91 @@
-#ifndef SEARCHINFO_H
-#define SEARCHINFO_H
-#include "constants.h"
-#include "stopwatch.h"
-#include "piece.h"
+#pragma once
+#include <cstring>
+#include "square.h"
+#include "clock.h"
 
-namespace Napoleon
+constexpr int maxPly = 1024;
+class Move;
+
+class SearchInfo
 {
+public:
+	enum class Time : int { Infinite = -1 };
 
-    class Move;
-    class SearchInfo
-    {
-    public:
-        enum class Time : int { Infinite = -1 };
+	explicit SearchInfo(int time = static_cast<int>(Time::Infinite), int depth = 1, int nodes = 0) noexcept;
+	void newSearch(int time = static_cast<int>(Time::Infinite));
+	void stopSearch();
+	int incrementDepth();
+	int maxDepth() const;
+	int Nodes() const;
+	bool timeOver() const;
+	void resetNodes();
+	void visitNode();
+	void setKillers(Move, int);
+	void setHistory(Move, uint8_t, int);
+	void setDepthLimit(int);
+	void setGameTime(int);
+	Move firstKiller(int) const;
+	Move secondKiller(int) const;
+	int historyScore(Move, uint8_t) const;
+	double elapsedTime() const;
+	int SelDepth;
 
-        SearchInfo(int time = int(Time::Infinite), int maxDepth = 1, int nodes = 0);
+private:
+	int depthLimit{};
+	int depth;
+	int nodes;
+	int history[2][64 * 64]{};
+	int allocatedTime;
+	Move killers[maxPly][2];
+	Clock timer;
+};
 
-        void NewSearch(int time = int(Time::Infinite));
-        void StopSearch();
-        int IncrementDepth();
-        int MaxDepth();
-        int Nodes();
-        bool TimeOver();
+inline bool SearchInfo::timeOver() const
+{
+	if (allocatedTime == static_cast<int>(Time::Infinite) && depth <= depthLimit)
+		return false;
 
-        void ResetNodes();
-        void VisitNode();
-        void SetKillers(Move, int);
-        void SetHistory(Move, Color, int);
-        void SetDepthLimit(int);
-        void SetGameTime(int);
-
-        Move FirstKiller(int);
-        Move SecondKiller(int);
-
-        int HistoryScore(Move, Color);
-
-        double ElapsedTime();
-
-        int MaxPly;
-
-    private:
-        int depthLimit;
-        int maxDepth;
-        int nodes;
-        int history[2][64*64];
-        int allocatedTime; // milliseconds
-        Move killers[Constants::MaxPly][2];
-        StopWatch timer;
-    };
-
-    inline bool SearchInfo::TimeOver()
-    {
-        if (allocatedTime == int(Time::Infinite) && maxDepth <= depthLimit)
-            return false;
-
-        return (timer.ElapsedMilliseconds() >= allocatedTime || timer.ElapsedMilliseconds() / allocatedTime >= 0.85);
-    }
-
-    inline int SearchInfo::Nodes()
-    {
-        return nodes;
-    }
-
-    inline void SearchInfo::VisitNode()
-    {
-        ++nodes;
-    }
-
-    inline Move SearchInfo::FirstKiller(int depth)
-    {
-        return killers[depth][0];
-    }
-
-    inline Move SearchInfo::SecondKiller(int depth)
-    {
-        return killers[depth][1];
-    }
-
-    inline int SearchInfo::HistoryScore(Move move, Color color)
-    {
-        return history[color][move.ButterflyIndex()];
-    }
-
-    inline double SearchInfo::ElapsedTime()
-    {
-        return timer.ElapsedMilliseconds();
-    }
-
-    inline void SearchInfo::SetKillers(Move move, int depth)
-    {
-        if (move != killers[depth][0])
-        {
-            killers[depth][1] = killers[depth][0];
-        }
-        killers[depth][0] = move;
-    }
-
-    inline void SearchInfo::SetHistory(Move move, Color color, int depth)
-    {
-        history[color][move.ButterflyIndex()] += (1 << depth);
-    }
+	return (timer.elapsedMilliseconds() >= allocatedTime || timer.elapsedMilliseconds() / allocatedTime >= 0.85);
 }
-#endif // SEARCHINFO_H
+
+inline int SearchInfo::Nodes() const
+{
+	return nodes;
+}
+
+inline void SearchInfo::visitNode()
+{
+	++nodes;
+}
+
+inline Move SearchInfo::firstKiller(const int depth) const
+{
+	return killers[depth][0];
+}
+
+inline Move SearchInfo::secondKiller(const int depth) const
+{
+	return killers[depth][1];
+}
+
+inline int SearchInfo::historyScore(const Move move, const uint8_t color) const
+{
+	return history[color][move.butterflyIndex()];
+}
+
+inline double SearchInfo::elapsedTime() const
+{
+	return timer.elapsedMilliseconds();
+}
+
+inline void SearchInfo::setKillers(const Move move, const int depth)
+{
+	if (move != killers[depth][0])
+		killers[depth][1] = killers[depth][0];
+	killers[depth][0] = move;
+}
+
+inline void SearchInfo::setHistory(const Move move, const uint8_t color, const int depth)
+{
+	history[color][move.butterflyIndex()] += (1 << depth);
+}

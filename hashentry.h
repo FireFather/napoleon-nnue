@@ -1,26 +1,21 @@
-#ifndef HASHENTRY_H
-#define HASHENTRY_H
-#include "defines.h"
+#pragma once
 #include "move.h"
-#include <mutex>
-#include <atomic>
 
-namespace Napoleon
+enum class ScoreType : uint8_t
 {
-    enum ScoreType : Byte { Exact=0, Alpha=1, Beta=2 };
+	Exact,
+	Alpha,
+	Beta
+};
 
-    class HashEntry
-    {
-    public:
-        ZobristKey Hash;
-        Byte Depth;
-        Byte Bound; // also holds age
-        Move BestMove;
-        int Score;
-
-        HashEntry();
-        HashEntry(ZobristKey, Byte, Byte, int, Move, ScoreType);
-    };
-}
-
-#endif // HASHENTRY_H
+class HashEntry
+{
+public:
+	uint64_t Key{};
+	uint8_t Depth{};
+	ScoreType Bound{};
+	Move BestMove;
+	int Score{};
+	HashEntry() noexcept;
+	HashEntry(uint64_t, uint8_t, int, Move, ScoreType);
+};

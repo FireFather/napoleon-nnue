@@ -1,16 +1,14 @@
 #include "hashentry.h"
 
-namespace Napoleon
-{
-    HashEntry::HashEntry()  { }
+HashEntry::HashEntry() noexcept
+= default;
 
-    HashEntry::HashEntry(ZobristKey hash, Byte depth, Byte age, int score, Move bestMove, ScoreType bound)
-    {
-        Hash = hash;
-        Depth = depth;
-        Score = score;
-        //Bound = (bound | (age << 2));
-        Bound = bound;
-        BestMove = bestMove;
-    }
+HashEntry::HashEntry(const uint64_t hash, const uint8_t depth, const int score, const Move bestMove,
+	const ScoreType bound)
+{
+	Key = hash;
+	Depth = depth;
+	Score = score;
+	Bound = bound;
+	BestMove = bestMove;
 }

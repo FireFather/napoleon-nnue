@@ -1,59 +1,51 @@
 #include "searchinfo.h"
-#include <cstring>
-#include <iostream>
 
-namespace Napoleon
+SearchInfo::SearchInfo(const int time, const int depth, const int nodes) noexcept :
+	depth(depth),
+	nodes(nodes)
 {
-    SearchInfo::SearchInfo(int time, int maxDepth, int nodes) :maxDepth(maxDepth), nodes(nodes)
-    {
-        MaxPly = 0;
-        allocatedTime = time;
-        SetDepthLimit(100);
-    }
+	SelDepth = 0;
+	allocatedTime = time;
+	setDepthLimit(100);
+}
 
-    int SearchInfo::IncrementDepth()
-    {
-        return maxDepth++;
-    }
+int SearchInfo::incrementDepth()
+{
+	return depth++;
+}
 
-    int SearchInfo::MaxDepth()
-    {
-        return maxDepth;
-    }
+int SearchInfo::maxDepth() const
+{
+	return depth;
+}
 
-    void SearchInfo::SetDepthLimit(int depth)
-    {
-        depthLimit = depth;
-    }
+void SearchInfo::setDepthLimit(const int depth)
+{
+	depthLimit = depth;
+}
 
-    void SearchInfo::NewSearch(int time)
-    {
-        ResetNodes();
-        allocatedTime = time;
+void SearchInfo::newSearch(const int time)
+{
+	resetNodes();
+	allocatedTime = time;
+	depth = 1;
+	memset(history, 0, sizeof(history));
+	memset(killers, 0, sizeof(killers));
+	timer.Restart();
+}
 
-        maxDepth = 1;
+void SearchInfo::stopSearch()
+{
+	setDepthLimit(100);
+}
 
-        std::memset(history, 0, sizeof(history));
-        std::memset(killers, 0, sizeof(killers));
+void SearchInfo::resetNodes()
+{
+	nodes = 0;
+}
 
-        timer.Restart();
-    }
-
-    void SearchInfo::StopSearch()
-    {
-        SetDepthLimit(100);
-    }
-
-    void SearchInfo::ResetNodes()
-    {
-        nodes = 0;
-    }
-
-    void SearchInfo::SetGameTime(int time)
-    {
-        allocatedTime = time;
-        timer.Restart();
-    }
-
-
+void SearchInfo::setGameTime(const int time)
+{
+	allocatedTime = time;
+	timer.Restart();
 }

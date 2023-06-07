@@ -1,49 +1,41 @@
-#ifndef PAWN_H
-#define PAWN_H
-#include "defines.h"
-#include "compassrose.h"
+#pragma once
+#include "direction.h"
+#include "ranks.h"
 
-namespace Napoleon
+class Pos;
+
+class Pawn
 {
-    class Board;
-    class Pawn
-    {
-    public:
+public:
+	static uint64_t getAllTargets(uint64_t pawns, const Pos& position);
+	static uint64_t getAnyAttack(uint64_t pawns, const Pos& position);
+	static uint64_t getAnyAttack(uint64_t pawns, uint8_t color, uint64_t squares);
+	static uint64_t getQuietTargets(uint8_t color, uint64_t pawns, uint64_t empty);
 
-        static BitBoard GetAllTargets(BitBoard pawns, Board& board);
-        INLINE static BitBoard GetAnyAttack(BitBoard pawns, Board& board);
-        static BitBoard GetAnyAttack(BitBoard pawns, Color color, BitBoard squares);
-        static BitBoard GetQuietTargets(Color color, BitBoard pawns, BitBoard empty);
+private:
+	static uint64_t getSinglePushTargets(uint8_t color, uint64_t pawns, uint64_t empty);
+	static uint64_t getDoublePushTargets(uint8_t color, uint64_t pawns, uint64_t empty);
+	static uint64_t getPawnsAbleToSinglePush(uint8_t color, uint64_t pawns, uint64_t empty);
+	static uint64_t getPawnsAbleToDoublePush(uint8_t color, uint64_t pawns, uint64_t empty);
+	static uint64_t getEastAttacks(uint8_t color, uint64_t pawns);
+	static uint64_t getWestAttacks(uint8_t color, uint64_t pawns);
+};
 
-    private:
-        static BitBoard GetSinglePushTargets(Color color, BitBoard pawns, BitBoard empty);
-        static BitBoard GetDoublePushTargets(Color color, BitBoard pawns, BitBoard empty);
-        INLINE static BitBoard GetPawnsAbleToSinglePush(Color color, BitBoard pawns, BitBoard empty);
-        INLINE static BitBoard GetPawnsAbleToDoublePush(Color color, BitBoard pawns, BitBoard empty);
-        INLINE static BitBoard GetEastAttacks(Color color, BitBoard pawns);
-        INLINE static BitBoard GetWestAttacks(Color color, BitBoard pawns);
-
-    };
-
-    INLINE BitBoard Pawn::GetQuietTargets(Color color, BitBoard pawns, BitBoard empty)
-    {
-        return GetSinglePushTargets(color, pawns, empty) | GetDoublePushTargets(color, pawns, empty);
-    }
-
-    INLINE BitBoard Pawn::GetSinglePushTargets(Color color, BitBoard pawns, BitBoard empty)
-    {
-        return color == PieceColor::White ? CompassRose::OneStepNorth(pawns) & empty : CompassRose::OneStepSouth(pawns) & empty;
-    }
-
-    INLINE BitBoard Pawn::GetDoublePushTargets(Color color, BitBoard pawns, BitBoard empty)
-    {
-        BitBoard singlePush = GetSinglePushTargets(color, pawns, empty);
-
-        return color == PieceColor::White
-            ? CompassRose::OneStepNorth(singlePush) & empty & Constants::Ranks::Four
-            : CompassRose::OneStepSouth(singlePush) & empty & Constants::Ranks::Five;
-    }
-
+INLINE uint64_t Pawn::getQuietTargets(const uint8_t color, const uint64_t pawns, const uint64_t empty)
+{
+	return getSinglePushTargets(color, pawns, empty) | getDoublePushTargets(color, pawns, empty);
 }
 
-#endif // PAWN_H
+INLINE uint64_t Pawn::getSinglePushTargets(const uint8_t color, const uint64_t pawns, const uint64_t empty)
+{
+	return color == White ? Direction::oneStepNorth(pawns) & empty : Direction::oneStepSouth(pawns) & empty;
+}
+
+INLINE uint64_t Pawn::getDoublePushTargets(const uint8_t color, const uint64_t pawns, const uint64_t empty)
+{
+	const uint64_t singlePush = getSinglePushTargets(color, pawns, empty);
+
+	return color == White
+		? Direction::oneStepNorth(singlePush) & empty & Ranks::Four
+		: Direction::oneStepSouth(singlePush) & empty & Ranks::Five;
+}

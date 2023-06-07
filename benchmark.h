@@ -1,20 +1,19 @@
-#ifndef BENCHMARK_H
-#define BENCHMARK_H
+#pragma once
 
-namespace Napoleon
+class Pos;
+
+class Benchmark
 {
-    class Board;
-    class Benchmark
-    {
-    public:
-        Benchmark(Board&);
-        void Start(int);
-        void CutoffTest();
+public:
+	explicit Benchmark(Pos&);
+	void runPerft(int);
+	uint64_t Perft(int);
+	void runDivide(int);
+	uint64_t Divide(int);
+	uint64_t Loop(int);
+	void perftTest();
+	void ttdTest(int) const;
 
-        unsigned long long Perft(int);
-    private:
-        Board& board;
-    };
-}
-
-#endif // BENCHMARK_H
+private:
+	Pos& position;
+};

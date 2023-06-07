@@ -1,0 +1,59 @@
+benchmark.o: benchmark.cpp defines.h pragma.h benchmark.h movegen.h \
+ position.h move.h piece.h moves.h magics.h masks.h square.h hashtable.h \
+ hashentry.h zobrist.h uci.h pawn.h direction.h files.h ranks.h \
+ evalterms.h searchinfo.h clock.h castle.h strings.h search.h smpinfo.h
+clock.o: clock.cpp clock.h
+eval.o: eval.cpp eval.h defines.h pragma.h position.h move.h piece.h \
+ moves.h magics.h masks.h square.h hashtable.h hashentry.h zobrist.h \
+ uci.h pawn.h direction.h files.h ranks.h evalterms.h searchinfo.h \
+ clock.h pst.h castle.h nnue-probe/nnue.h
+fen.o: fen.cpp fen.h piece.h defines.h pragma.h move.h evalterms.h \
+ square.h position.h moves.h magics.h masks.h hashtable.h hashentry.h \
+ zobrist.h uci.h pawn.h direction.h files.h ranks.h searchinfo.h clock.h
+hashentry.o: hashentry.cpp hashentry.h move.h defines.h pragma.h piece.h
+hashtable.o: hashtable.cpp hashtable.h hashentry.h move.h defines.h \
+ pragma.h piece.h searchinfo.h square.h clock.h
+main.o: main.cpp search.h searchinfo.h square.h move.h defines.h pragma.h \
+ piece.h clock.h smpinfo.h position.h moves.h magics.h masks.h \
+ hashtable.h hashentry.h zobrist.h uci.h pawn.h direction.h files.h \
+ ranks.h evalterms.h nnue-probe/nnue.h
+move.o: move.cpp move.h defines.h pragma.h piece.h position.h moves.h \
+ magics.h masks.h square.h hashtable.h hashentry.h zobrist.h uci.h pawn.h \
+ direction.h files.h ranks.h evalterms.h searchinfo.h clock.h
+movegen.o: movegen.cpp movegen.h position.h pragma.h move.h defines.h \
+ piece.h moves.h magics.h masks.h square.h hashtable.h hashentry.h \
+ zobrist.h uci.h pawn.h direction.h files.h ranks.h evalterms.h \
+ searchinfo.h clock.h castle.h
+movepick.o: movepick.cpp movepick.h movegen.h position.h pragma.h move.h \
+ defines.h piece.h moves.h magics.h masks.h square.h hashtable.h \
+ hashentry.h zobrist.h uci.h pawn.h direction.h files.h ranks.h \
+ evalterms.h searchinfo.h clock.h castle.h
+moves.o: moves.cpp defines.h pragma.h direction.h files.h piece.h \
+ position.h move.h moves.h magics.h masks.h square.h hashtable.h \
+ hashentry.h zobrist.h uci.h pawn.h ranks.h evalterms.h searchinfo.h \
+ clock.h
+pawn.o: pawn.cpp position.h pragma.h move.h defines.h piece.h moves.h \
+ magics.h masks.h square.h hashtable.h hashentry.h zobrist.h uci.h pawn.h \
+ direction.h files.h ranks.h evalterms.h searchinfo.h clock.h
+piece.o: piece.cpp piece.h defines.h pragma.h direction.h files.h \
+ position.h move.h moves.h magics.h masks.h square.h hashtable.h \
+ hashentry.h zobrist.h uci.h pawn.h ranks.h evalterms.h searchinfo.h \
+ clock.h
+position.o: position.cpp piece.h defines.h pragma.h fen.h move.h eval.h \
+ position.h moves.h magics.h masks.h square.h hashtable.h hashentry.h \
+ zobrist.h uci.h pawn.h direction.h files.h ranks.h evalterms.h \
+ searchinfo.h clock.h pst.h castle.h
+search.o: search.cpp search.h searchinfo.h square.h move.h defines.h \
+ pragma.h piece.h clock.h smpinfo.h position.h moves.h magics.h masks.h \
+ hashtable.h hashentry.h zobrist.h uci.h pawn.h direction.h files.h \
+ ranks.h evalterms.h eval.h pst.h movepick.h movegen.h castle.h \
+ searchterms.h
+searchinfo.o: searchinfo.cpp searchinfo.h square.h move.h defines.h \
+ pragma.h piece.h clock.h
+square.o: square.cpp square.h move.h defines.h pragma.h piece.h
+strings.o: strings.cpp strings.h defines.h pragma.h
+uci.o: uci.cpp search.h searchinfo.h square.h move.h defines.h pragma.h \
+ piece.h clock.h smpinfo.h position.h moves.h magics.h masks.h \
+ hashtable.h hashentry.h zobrist.h uci.h pawn.h direction.h files.h \
+ ranks.h evalterms.h benchmark.h
+zobrist.o: zobrist.cpp zobrist.h
