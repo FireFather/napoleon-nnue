@@ -18,7 +18,8 @@ Had a chance to work on Marco's excellent multi-threaded engine:
 
 Support added for an external NNUE (halfkp_256x2-32-32) evaluation (nn.bin) via Daniel Shawul's nnue-probe library: https://github.com/dshawul/nnue-probe.
 
-The executable has been produced using Visual Studio 2022...the project files have been included.
+Visual Studio 2022 used...the project files have been included.
+The executable has been produced using MSYS2 mingw-w64-x86_64-toolchain.
 
 Any halfkp_256x2-32-32 NNUE can be used...see:
 
