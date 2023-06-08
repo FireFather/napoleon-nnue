@@ -26,7 +26,7 @@ https://github.com/FireFather/halfkp_256x2-32-32-nets or
 
 https://tests.stockfishchess.org/nns for a different net.
 
-SF-compatible nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:43 or earlier.
+Compatible nets start on page 72-73 (approx.) with dates of 21-05-02 22:26:43 or earlier.
 
 The nnue file size must = 20,530 KB (halfkp_256x2-32-32).
 
