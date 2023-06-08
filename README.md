@@ -2,8 +2,8 @@
  
 chess engine Napoleon by crybot (Marco Pampaloni)
 
-![alt tag](https://raw.githubusercontent.com/FireFather/napoleon/master/napoleon.bmp)
-![alt tag](https://raw.githubusercontent.com/FireFather/napoleon/master/napoleonpp.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/napoleon/master/logos/napoleon.bmp)
+![alt tag](https://raw.githubusercontent.com/FireFather/napoleon/master/logos/napoleonpp.bmp)
 
 https://github.com/crybot/Napoleon/
 
