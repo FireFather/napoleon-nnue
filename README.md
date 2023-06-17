@@ -21,7 +21,7 @@ Support has been added for an external NNUE (halfkp_256x2-32-32) evaluation (nn.
 
 **strength estimate**
 
-| ultra-fast gauntlet |       |       |                   |       |
+| 					  |       |       |                   |       |
 | --------------------| ----- |------ | ----------------- | ----- |
 |  napoleon-nnue      | 2624 |  16384 |(+6857,=6639,-2888)| 62.1 %|
 |  vs.                |      | games |(    +,    =,    -)|   (%) |
